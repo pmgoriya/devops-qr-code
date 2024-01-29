@@ -1,15 +1,16 @@
 FROM node:18-alpine
 
-WORKDIR /qrapp
+WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
-
-RUN npm install
-
+# Copy all files
 COPY . .
 
+# Install dependencies
+RUN npm install
+
+# Run build command
 RUN npm run build
 
-CMD ["npm","start"]
+# Specify the command to start the application
+CMD npm start
 
