@@ -13,7 +13,7 @@ app = FastAPI()
 
 # Allowing CORS for local testing
 origins = [
-    "http://54.227.108.172:3000"
+    "http://localhost:3000"
 ]
 
 app.add_middleware(
