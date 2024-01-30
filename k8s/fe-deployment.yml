@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: fe
-        image: fe:latest
+        image: pmgoriya/fe:latest
         ports:
         - containerPort: 3000
