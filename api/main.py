@@ -3,17 +3,17 @@ from fastapi.middleware.cors import CORSMiddleware
 import qrcode
 import boto3
 from io import BytesIO
-import os  # Import the os module
+import os
 
-# Loading Environment variable (AWS Access Key and Secret Key)
+# Load environment variables from .env file
 from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
 
-# Allowing CORS for local testing
+# CORS configuration for local testing
 origins = [
-    "http://localhost:3000" # edit localhost to actual Public IP 
+    "http://localhost:3000" # Replace with actual Public IP when deploying
 ]
 
 app.add_middleware(
@@ -23,9 +23,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# AWS S3 client initialization
+s3 = boto3.client('s3')
+
+# Option 1: Reading AWS credentials from .env file (using dotenv)
+# Comment out this section if using Option 2
+
+"""
 # AWS S3 Configuration
 s3 = boto3.client('s3', aws_access_key_id=os.getenv("AWS_ACCESS_KEY"), aws_secret_access_key=os.getenv("AWS_SECRET_KEY"))
-bucket_name = 'pmgoriya-qr' # Add your bucket name here
+"""
+
+# Option 2: Reading AWS credentials from pipeline environment variables
+# Uncomment this section if using Option 2
+
+# AWS S3 Configuration
+s3 = boto3.client('s3', aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"), aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"))
+
+
+# Bucket name for storing QR codes
+bucket_name = 'pmgoriya-qr' # Replace with your actual bucket name
 
 @app.post("/generate-qr/")
 async def generate_qr(url: str):
@@ -50,12 +67,14 @@ async def generate_qr(url: str):
     file_name = f"qr_codes/{url.split('//')[-1]}.png"
 
     try:
-        # Upload to S3
+        # Upload QR code image to S3 bucket
         s3.put_object(Bucket=bucket_name, Key=file_name, Body=img_byte_arr, ContentType='image/png', ACL='public-read')
 
-        # Generate the S3 URL
+        # Generate the S3 URL for the uploaded QR code
         s3_url = f"https://{bucket_name}.s3.amazonaws.com/{file_name}"
         return {"qr_code_url": s3_url}
     except Exception as e:
+        # Raise HTTPException if an error occurs during the upload process
         raise HTTPException(status_code=500, detail=str(e))
+
    
