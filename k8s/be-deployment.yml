@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: be
-        image: be:latest
+        image: pmgoriya/be:latest
         ports:
         - containerPort: 8000
