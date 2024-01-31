@@ -13,7 +13,7 @@ app = FastAPI()
 
 # CORS configuration for local testing
 origins = [
-    "http://localhost:3000" # Replace with actual Public IP when deploying
+    "http://54.163.211.244:3000" # Replace with actual Public IP when deploying
 ]
 
 app.add_middleware(
