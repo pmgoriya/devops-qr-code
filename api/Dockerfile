@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy just the requirements file into the container
-COPY requirements.txt .
+COPY api/requirements.txt .
 
 # Install system dependencies
 RUN apt-get update && \
