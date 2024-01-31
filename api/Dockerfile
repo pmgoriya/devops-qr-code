@@ -18,9 +18,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the API code into the container
 COPY . .
 
+# Change the working directory to the API directory
+WORKDIR /app/api
+
 # Expose port 8000 (the default port FastAPI uses)
 EXPOSE 8000
 
 # Command to run the API server using Uvicorn
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
 
