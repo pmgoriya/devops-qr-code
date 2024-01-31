@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the API code into the container
-COPY . /app
+COPY . .
 
 # Install system dependencies
 RUN apt-get update && \
